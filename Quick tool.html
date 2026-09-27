@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="description" content="BizBoost helps small businesses create marketing content quickly.">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="Bizbot.css">
+<title>BizBoost Quick Tool</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f7fb;color:#111827;padding-bottom:80px}
+header{background:#111827;color:#fff;padding:28px 20px;border-radius:0 0 28px 28px;position:sticky;top:0;z-index:2}
+header h1{margin:0;font-size:30px}header p{margin:6px 0 0;color:#cbd5e1}
+main{max-width:760px;margin:auto;padding:18px}.card{background:#fff;border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 5px 20px #0000000b}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.tile{border:0;border-radius:16px;padding:18px;background:#eef2ff;text-align:left;font-size:16px;font-weight:700;cursor:pointer}
+.tile small{display:block;font-weight:400;margin-top:6px;color:#475569}h2{margin-top:0}
+label{display:block;font-weight:650;margin:12px 0 6px}input,textarea,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;font:inherit}textarea{min-height:110px}
+button.primary{width:100%;border:0;background:#111827;color:#fff;padding:13px;border-radius:12px;font-weight:700;font-size:16px;cursor:pointer;margin-top:12px}
+.output{white-space:pre-wrap;background:#f8fafc;border-radius:14px;padding:14px;margin-top:14px;line-height:1.5}.muted{color:#64748b}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.pill{background:#dcfce7;color:#166534;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:10px;display:flex;gap:8px;box-shadow:0 -4px 18px #0001;z-index:3}nav button{flex:1;border:0;background:#f1f5f9;padding:12px;border-radius:12px;font-weight:650}
+#installBtn{display:none;margin-top:12px;background:#fff;color:#111827}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+    <!-- <div class="navbar">
+        <ul>
+         <li><a href="Business tool.html">Business tool</a></li>
+         <li><a href="AI market assistance.html">AI Assistance</a></li>
+         <li><a href="AI testing.html">AI Testing</a></li>
+         <li><a href="Quick tool.html">TOOLS</a></li>
+         <li><a href="Homepage.html">HOME</a></li>
+        </ul>
+        </div> -->
+<header><h1>🚀 BizBoost</h1><p>Make your business look bigger in minutes.</p><button id="installBtn" class="primary">Install BizBoost</button></header>
+<main>
+<section id="home">
+<div class="card"><div class="row"><h2>Quick tools</h2><button class="pill" onclick="openTool('BizBoost')">Back</button></div>
+<div class="grid">
+<button class="tile" onclick="show('post')">✍️ Create a Post<small>Generate a ready-to-use promo caption.</small></button>
+<button class="tile" onclick="show('flyer')">🎨 Flyer Copy<small>Create text for a promotional flyer.</small></button>
+<button class="tile" onclick="show('replies')">💬 Customer Replies<small>Polish replies to customer questions.</small></button>
+<button class="tile" onclick="show('ideas')">💡 Marketing Ideas<small>Get quick ideas for your business.</small></button>
+</div></div>
+<div class="card"><h2>🏪 My business</h2><p id="bizSummary" class="muted">Add your business details to personalize content.</p><button class="primary" onclick="show('business')">Set up business</button></div>
+</section>
+
+<section id="post" class="card" hidden><h2>✍️ Create a Post</h2>
+<label>What are you promoting?</label><input id="postProduct" placeholder="e.g. New sneakers">
+<label>Offer / price</label><input id="postOffer" placeholder="e.g. ₦25,000, 10% off">
+<label>Tone</label><select id="postTone"><option>Friendly</option><option>Professional</option><option>Exciting</option></select>
+<button class="primary" onclick="generatePost()">Generate</button><div id="postOut" class="output" hidden></div><button class="primary" onclick="copyOut('postOut')">Copy</button><button class="primary" onclick="show('home')">Back</button></section>
+
+<section id="flyer" class="card" hidden><h2>🎨 Flyer Copy</h2>
+<label>Product/service</label><input id="flyerProduct" placeholder="e.g. Hair braiding">
+<label>Key details</label><textarea id="flyerDetails" placeholder="Price, location, booking info..."></textarea>
+<button class="primary" onclick="generateFlyer()">Generate flyer text</button><div id="flyerOut" class="output" hidden></div><button class="primary" onclick="copyOut('flyerOut')">Copy</button><button class="primary" onclick="show('home')">Back</button></section>
+
+<section id="replies" class="card" hidden><h2>💬 Customer Replies</h2>
+<label>Customer message</label><textarea id="customerMsg" placeholder="e.g. Is this still available?"></textarea>
+<button class="primary" onclick="generateReply()">Create reply</button><div id="replyOut" class="output" hidden></div><button class="primary" onclick="copyOut('replyOut')">Copy</button><button class="primary" onclick="show('home')">Back</button></section>
+
+<section id="ideas" class="card" hidden><h2>💡 Marketing Ideas</h2>
+<label>Business type</label><input id="ideaBiz" placeholder="e.g. Clothing store">
+<button class="primary" onclick="generateIdeas()">Generate ideas</button><div id="ideasOut" class="output" hidden></div><button class="primary" onclick="copyOut('ideasOut')">Copy</button><button class="primary" onclick="show('home')">Back</button></section>
+
+<section id="business" class="card" hidden><h2>🏪 My Business</h2>
+<label>Business name</label><input id="bizName" placeholder="e.g. Cassidy Fashion">
+<label>What do you sell?</label><input id="bizType" placeholder="e.g. Clothes and accessories">
+<label>WhatsApp / contact</label><input id="bizContact" placeholder="e.g. 0800 000 0000">
+<button class="primary" onclick="saveBusiness()">Save business</button><button class="primary" onclick="show('home')">Back</button></section>
+</main>
+<nav><button onclick="show('home')">🏠 Home</button><button onclick="show('business')">🏪 Business</button></nav>
+
+<script>
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('main section').forEach(s=>s.hidden=true);$(id).hidden=false;scrollTo(0,0)}
+function biz(){return JSON.parse(localStorage.getItem('biz')||'{}')}
+function saveBusiness(){let b={name:$('bizName').value||'My Business',type:$('bizType').value||'your products',contact:$('bizContact').value};localStorage.setItem('biz',JSON.stringify(b));updateBiz();show('home')}
+function updateBiz(){let b=biz();if(b.name)$('bizSummary').textContent=b.name+' • '+b.type+(b.contact?' • '+b.contact:'')}
+function generatePost(){let b=biz(),p=$('postProduct').value||'our latest product',o=$('postOffer').value||'a special offer',t=$('postTone').value;let x=`${t==='Professional'?'Discover':'🔥 Check this out!'} ${p} is now available at ${b.name||'our business'}.\n\n${o}.\n\nMessage us today to order or ask any questions.${b.contact?' WhatsApp: '+b.contact:''}\n\n#SmallBusiness #ShopLocal #NewOffer`;$('postOut').textContent=x;$('postOut').hidden=false}
+function generateFlyer(){let b=biz(),p=$('flyerProduct').value||'Our products',d=$('flyerDetails').value||'Contact us for details';$('flyerOut').textContent=`${b.name||'YOUR BUSINESS'}\n\n✨ ${p.toUpperCase()} ✨\n\n${d}\n\nORDER / BOOK TODAY\n${b.contact||'Contact us now'}`;$('flyerOut').hidden=false}
+function generateReply(){let b=biz(),m=$('customerMsg').value||'Hello';$('replyOut').textContent=`Hi! Thanks for contacting ${b.name||'us'} 😊\n\nThanks for your message. We’d be happy to help. Regarding “${m}”, please share any details you need and we’ll get back to you shortly.${b.contact?' You can also reach us on '+b.contact+'.':''}`;$('replyOut').hidden=false}
+function generateIdeas(){let b=$('ideaBiz').value||'your business';$('ideasOut').textContent=`5 quick ideas for ${b}:\n\n1. Post a customer testimonial.\n2. Make a short behind-the-scenes video.\n3. Run a limited-time offer.\n4. Show 3 ways to use your product.\n5. Ask customers a simple question and turn answers into a post.`;$('ideasOut').hidden=false}
+async function copyOut(id){try{await navigator.clipboard.writeText($(id).textContent);alert('Copied!')}catch(e){alert('Select and copy the text manually.')}}
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('installBtn').style.display='block'});
+$('installBtn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt=null;$('installBtn').style.display='none'});
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+(function(){let b=biz();if(b.name){$('bizName').value=b.name;$('bizType').value=b.type||'';$('bizContact').value=b.contact||'';updateBiz()}})();
+</script>
+</body></html>

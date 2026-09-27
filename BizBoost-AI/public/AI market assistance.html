@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827"><link rel="manifest" href="manifest.json"><title>BizBoost AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f3f4f6;color:#111827}
+header{background:#111827;color:#fff;padding:18px 16px;position:sticky;top:0;z-index:4}.wrap{max-width:760px;margin:auto}.brand{font-size:24px;font-weight:800}.sub{opacity:.72;font-size:13px}
+main{padding:16px}.card{background:#fff;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 4px 16px #0000000d}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.tool{border:1px solid #e5e7eb;border-radius:14px;padding:14px;background:#fff;text-align:left;cursor:pointer}
+.tool b{display:block;margin-bottom:4px}.tool span{font-size:13px;color:#6b7280}label{display:block;font-weight:700;font-size:13px;margin:10px 0 5px}
+input,textarea,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;font:inherit}textarea{min-height:110px}
+button{border:0;border-radius:12px;padding:12px 15px;font-weight:750;cursor:pointer}.primary{background:#111827;color:#fff}.secondary{background:#e5e7eb;color:#111827}
+.row{display:flex;gap:8px;flex-wrap:wrap}.result{white-space:pre-wrap;background:#f9fafb;border:1px dashed #d1d5db;border-radius:12px;padding:14px;margin-top:12px;line-height:1.5}.hidden{display:none}
+.status{font-size:13px;padding:10px;border-radius:10px;margin-top:10px;background:#f3f4f6}.ai{background:#eef2ff}
+</style></head><body>
+<header><div class="wrap"><div class="brand">🚀 BizBoost AI</div><div class="sub">AI marketing assistant for small businesses</div></div></header>
+<main class="wrap">
+<section id="home"><div class="card ai"><h2>Real AI generation</h2><p class="muted">This version sends your request to your own secure backend. The API key stays on the server, not inside this app.</p></div>
+<div class="card"><h3>Business profile</h3><label>Business name</label><input id="name" placeholder="e.g. Cassidy Cakes"><label>Business type</label><input id="type" placeholder="e.g. bakery"><label>What do you sell?</label><input id="offer" placeholder="e.g. cakes and pastries"><label>Contact</label><input id="contact" placeholder="WhatsApp or phone"><button class="primary" style="margin-top:10px" onclick="save()">Save profile</button></div>
+<div class="grid">
+<button class="tool" onclick="openTool('post')"><b>✍️ Social Post</b><span>AI-written marketing copy</span></button>
+<button class="tool" onclick="openTool('flyer')"><b>🖼️ Flyer Copy</b><span>Headline and promotion</span></button>
+<button class="tool" onclick="openTool('reply')"><b>💬 Customer Reply</b><span>Natural customer responses</span></button>
+<button class="tool" onclick="openTool('ideas')"><b>💡 Ideas</b><span>AI marketing strategy ideas</span></button>
+</div>
+<div id="status" class="status">Backend status: not checked.</div></section>
+
+<section id="tool" class="hidden"><div class="card"><h2 id="toolTitle">AI Tool</h2>
+<div id="fields"></div><div class="row" style="margin-top:12px"><button class="primary" onclick="runAI()">Generate with AI</button><button class="secondary" onclick="openTool('home')">Back</button></div>
+<div id="loading" class="status hidden">Generating… the tiny digital intern is thinking.</div><div id="result" class="result hidden"></div>
+</div></section>
+</main>
+<script>
+const profileKey='bizboost-ai-profile'; let current='post';
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(profileKey,JSON.stringify({name:$('name').value,type:$('type').value,offer:$('offer').value,contact:$('contact').value}));alert('Profile saved.')}
+function load(){let p=JSON.parse(localStorage.getItem(profileKey)||'{}');$('name').value=p.name||'';$('type').value=p.type||'';$('offer').value=p.offer||'';$('contact').value=p.contact||''}
+function openTool(t){current=t; $('home').classList.toggle('hidden',t!=='home');$('tool').classList.toggle('hidden',t==='home'); if(t==='home')return;
+const titles={post:'✍️ AI Social Post',flyer:'🖼️ AI Flyer Copy',reply:'💬 AI Customer Reply',ideas:'💡 AI Marketing Ideas'};$('toolTitle').textContent=titles[t];
+const f={post:`<label>Goal</label><select id="goal"><option>Get more orders</option><option>Announce a product</option><option>Promote a discount</option><option>Build trust</option></select><label>Details</label><textarea id="input" placeholder="Tell the AI what you want to promote"></textarea>`,
+flyer:`<label>Promotion</label><input id="input" placeholder="e.g. Weekend Cake Sale"><label>Details</label><textarea id="extra" placeholder="Products, price, deadline, location..."></textarea>`,
+reply:`<label>Customer message</label><textarea id="input" placeholder="Paste the customer's message"></textarea><label>Tone</label><select id="goal"><option>Friendly</option><option>Professional</option><option>Short</option></select>`,
+ideas:`<label>Goal</label><select id="goal"><option>Get more customers</option><option>Get repeat customers</option><option>Promote a new product</option><option>Grow on social media</option></select><label>Extra context</label><textarea id="input" placeholder="Anything the AI should know"></textarea>`};$('fields').innerHTML=f[t];$('result').classList.add('hidden')}
+async function runAI(){const p=JSON.parse(localStorage.getItem(profileKey)||'{}');const input=$('input')?.value||'';const extra=$('extra')?.value||'';const goal=$('goal')?.value||'';$('loading').classList.remove('hidden');$('result').classList.add('hidden');
+try{const r=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:current,business:p,goal,input,extra})});const data=await r.json();if(!r.ok)throw new Error(data.error||'Request failed');$('result').textContent=data.text;$('result').classList.remove('hidden')}catch(e){$('result').textContent='Could not reach the AI backend. Make sure the server is running and your server API key is configured.\\n\\nError: '+e.message;$('result').classList.remove('hidden')}finally{$('loading').classList.add('hidden')}}
+load();
+</script></body></html>

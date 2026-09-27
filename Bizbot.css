@@ -1,0 +1,44 @@
+/* .navbar{
+    position: absolute;
+    background-color: rgba(216, 28, 28, 0.274);
+    border: 1px solid none;
+    width: 1060px;
+    height: 142px;
+    text-decoration: none;
+    margin-top: -540px;
+    font-size: 29px;
+    font-weight: bolder;
+    margin-left: 190px;
+    }
+    .navbar img{
+        margin-top: 100;
+    }
+    .navbar a{
+        text-decoration: underline red 4%;
+        padding: 19px;
+        color: rgb(230, 19, 19);
+        margin-left: 59px;
+        gap: 12px;
+        text-align: center;
+    }
+    .navbar li{
+        display: inline;
+        margin-left: 10px;
+        font-size: small;
+        margin: -15px;
+        margin-left: 88px; 
+     }
+    .navbar ul{
+        list-style-type: none;
+
+    }
+    .navbar ul{
+        padding-bottom: -22px;
+    }  */
+    .F6{
+        color: purple;
+        text-decoration:  none;
+        
+        
+    }
+    

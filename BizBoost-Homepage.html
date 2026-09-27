@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="Bizbot.css">
+<title>BizBoost-Homepage</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f3f4f6;color:#111827}
+header{background:#111827;color:white;padding:18px 16px;position:sticky;top:0;z-index:5}
+.wrap{max-width:760px;margin:auto}.brand{font-size:24px;font-weight:800}.sub{opacity:.7;font-size:13px}
+main{padding:16px}.card{background:white;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 4px 16px #0000000d}
+h1,h2,h3{margin:0 0 8px}.muted{color:#6b7280;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.tool{border:1px solid #e5e7eb;border-radius:14px;padding:14px;background:white;text-align:left;cursor:pointer}
+.tool b{display:block;margin-bottom:4px}.tool span{font-size:13px;color:#6b7280}
+label{display:block;font-weight:700;font-size:13px;margin:10px 0 5px}input,textarea,select{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;font:inherit}textarea{min-height:100px}
+button{border:0;border-radius:12px;padding:12px 15px;font-weight:750;cursor:pointer}.primary{background:#111827;color:white}.secondary{background:#e5e7eb;color:#111827}.row{display:flex;gap:8px;flex-wrap:wrap}.result{white-space:pre-wrap;background:#f9fafb;border:1px dashed #d1d5db;border-radius:12px;padding:14px;margin-top:12px;line-height:1.5}
+.badge{display:inline-block;background:#eef2ff;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}.hidden{display:none}.bar{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden}.fill{height:100%;background:#111827;width:0}.small{font-size:12px}
+.install{display:none;margin-top:10px;width:100%}
+</style>
+</head>
+<body>
+    <!-- <div class="navbar">       
+        <ul>
+         <li><a href="Business tool.html">Business tool</a></li>
+         <li><a href="AI market assistance.html">AI Assistance</a></li>
+         <li><a href="AI testing.html">AI Testing</a></li>
+         <li><a href="Quick tool.html">TOOLS</a></li>
+         <li><a href="Homepage.html"></a>HOME</li>
+        </ul>
+        </div> -->
+<header><div class="wrap"><div class="brand">🚀 BizBoost</div><div class="sub">Simple marketing tools for small businesses</div><button id="install" class="secondary install">Install app</button></div></header>
+<main class="wrap">
+<section id="home">
+<div class="card"><span class="badge">FREE PLAN</span><h2 style="margin-top:8px">Create marketing content in seconds</h2><p class="muted">Your first 5 generations each day are free. No account needed for this prototype.</p><div class="bar"><div id="usageFill" class="fill"></div></div><p id="usageText" class="small muted"></p></div>
+<div  class="grid">
+<button  class="tool"  onclick="show('post')"><b>🖼️ <li  ></li><a class="F6" href="AI market assistance.html">AI Assistance</a></li> </b><span>This helps you sets up a business profile</span></button>
+<button  class="tool" onclick="show('flyer')"><b> 💬 <li ><a class="F6" href="AI testing.html">AI Testing</a></li></b><span>This helps you to test your business and see if it is ready to be published</span></button>
+<button  class="tool" onclick="show('reply')"><b> 💡 <li ><a class="F6" href="Quick tool.html">TOOLS</a></li></b><span>This helps you sets up a business</span></button>
+<button  class="tool" onclick="show('ideas')"><b> ✍️ <li ><a class="F6" href="Business tool.html">Business tool</a></li></b><span>This makes your business looks bigger in minutes</span></button>
+</div>
+<!-- <div class="card"><h3>Business profile</h3><p class="muted">Save this once and reuse it everywhere.</p>
+<label>Business name</label><input id="bizName" placeholder="e.g. Cassidy Cakes">
+<label>Business type</label><input id="bizType" placeholder="e.g. bakery">
+<label>What do you sell?</label><input id="bizOffer" placeholder="e.g. cakes, cupcakes and pastries">
+<label>Contact / WhatsApp</label><input id="bizContact" placeholder="e.g. 0800 000 0000">
+<div class="row" style="margin-top:10px"><button class="primary" onclick="saveProfile()">Save profile</button><button class="secondary" onclick="loadProfile()">Load saved</button></div></div>
+<div class="card"><h3>Next step</h3><p class="muted">This version is a polished offline prototype. Real AI generation and payments need a secure backend, so API keys should never be placed in the browser.</p></div>
+</section>
+
+<section id="post" class="hidden"><div class="card"><h2>✍️ Social Post</h2><label>Goal</label><select id="postGoal"><option>Get more orders</option><option>Announce a new product</option><option>Promote a discount</option><option>Build trust</option></select><label>Offer / details</label><textarea id="postDetails" placeholder="e.g. 20% off all cakes this weekend"></textarea><div class="row"><button class="primary" onclick="generate('post')">Generate</button><button class="secondary" onclick="show('home')">Back</button></div><div id="postResult" class="result hidden"></div></div></section>
+
+<section id="flyer" class="hidden"><div class="card"><h2>🖼️ Flyer Copy</h2><label>Promotion</label><input id="flyerPromo" placeholder="e.g. Weekend Cake Sale"><label>Details</label><textarea id="flyerDetails" placeholder="Products, price, deadline, location..."></textarea><div class="row"><button class="primary" onclick="generate('flyer')">Generate</button><button class="secondary" onclick="show('home')">Back</button></div><div id="flyerResult" class="result hidden"></div></div></section>
+
+<section id="reply" class="hidden"><div class="card"><h2>💬 Customer Reply</h2><label>Customer message</label><textarea id="customerMsg" placeholder="Paste the customer's message here"></textarea><label>Tone</label><select id="replyTone"><option>Friendly</option><option>Professional</option><option>Short and direct</option></select><div class="row"><button class="primary" onclick="generate('reply')">Generate</button><button class="secondary" onclick="show('home')">Back</button></div><div id="replyResult" class="result hidden"></div></div></section>
+
+<section id="ideas" class="hidden"><div class="card"><h2>💡 Marketing Ideas</h2><label>What are you trying to achieve?</label><select id="ideaGoal"><option>Get more customers</option><option>Get repeat customers</option><option>Promote a new product</option><option>Grow on social media</option></select><div class="row"><button class="primary" onclick="generate('ideas')">Generate ideas</button><button class="secondary" onclick="show('home')">Back</button></div><div id="ideasResult" class="result hidden"></div></div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const key='bizboost-profile-v2', usageKey='bizboost-usage-v2', dayKey='bizboost-day-v2';
+function today(){return new Date().toISOString().slice(0,10)}
+function usage(){if(localStorage.getItem(dayKey)!==today()){localStorage.setItem(dayKey,today());localStorage.setItem(usageKey,'0')}return +(localStorage.getItem(usageKey)||0)}
+function updateUsage(){let u=usage();$('usageText').textContent=`${u}/5 free generations used today`;$('usageFill').style.width=Math.min(100,u/5*100)+'%'}
+function show(id){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));$(id).classList.remove('hidden');window.scrollTo(0,0);updateUsage()}
+function profile(){return {name:$('bizName').value.trim()||'your business',type:$('bizType').value.trim()||'small business',offer:$('bizOffer').value.trim()||'your products',contact:$('bizContact').value.trim()}}
+function saveProfile(){localStorage.setItem(key,JSON.stringify(profile()));alert('Business profile saved.')}
+function loadProfile(){let p=JSON.parse(localStorage.getItem(key)||'null');if(!p)return alert('No saved profile yet.');$('bizName').value=p.name;$('bizType').value=p.type;$('bizOffer').value=p.offer;$('bizContact').value=p.contact}
+function consume(){let u=usage();if(u>=5){alert('You have used the 5 free generations for today.');return false}localStorage.setItem(usageKey,String(u+1));updateUsage();return true}
+function put(id,text){$(id).textContent=text;$(id).classList.remove('hidden');let b=document.createElement('button');b.className='secondary';b.textContent='Copy';b.style.marginTop='8px';b.onclick=()=>navigator.clipboard?.writeText(text);$(id).appendChild(b)}
+function generate(type){
+ if(!consume())return; let p=profile(), text='';
+ if(type==='post'){let d=$('postDetails').value.trim()||'a special offer';text=`${p.name} is here to help you with ${p.offer}.\n\n${d}\n\nReady to order? Message us on ${p.contact||'WhatsApp'}.\n\n#${p.name.replace(/\W/g,'')} #SmallBusiness #ShopLocal`}
+ if(type==='flyer'){let d=$('flyerDetails').value.trim()||'Limited-time offer';text=`${$('flyerPromo').value.trim()||'SPECIAL OFFER'}\n\n${p.name}\n${d}\n\nWe offer: ${p.offer}\n\nORDER NOW\n${p.contact||'Contact us today'}\nLimited availability. Terms may apply.`}
+ if(type==='reply'){let m=$('customerMsg').value.trim()||'I would like to know more.';text=`Hi! Thanks for reaching out to ${p.name}. 😊\n\nRegarding your message: “${m}”\n\nWe’d be happy to help. Please send us the details you need, and we’ll get back to you as soon as possible.\n\n${p.contact||'Thank you for choosing us!'}`}
+ if(type==='ideas'){let g=$('ideaGoal').value;text=`Marketing ideas for ${p.name} (${g}):\n\n1. Post a short product demo or behind-the-scenes clip.\n2. Create a limited-time offer with a clear deadline.\n3. Ask happy customers for a short testimonial.\n4. Share a useful tip related to ${p.offer}.\n5. Run a simple “tag a friend” awareness post.\n6. Create a weekly customer FAQ post.\n7. Offer a small repeat-customer perk.`}
+ put(type+'Result',text)
+}
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+let deferred;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;$('install').style.display='block'});
+$('install').onclick=async()=>{if(deferred){deferred.prompt();deferred=null}};
+loadProfile();updateUsage();
+</script>
+</body></html> -->

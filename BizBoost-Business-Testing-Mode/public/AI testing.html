@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827"><title>BizBoost AI Testing</title>
+<style>
+body{font-family:system-ui;margin:0;background:#f5f7fb;color:#111827}.wrap{max-width:900px;margin:auto;padding:20px}
+header{background:#111827;color:white;padding:24px 20px}h1{margin:0 0 6px}.card{background:white;border-radius:16px;padding:18px;margin:16px 0;box-shadow:0 4px 18px #11182712}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label{display:block;font-weight:650;margin:6px 0}input,select,textarea{width:100%;box-sizing:border-box;padding:11px;border:1px solid #d1d5db;border-radius:10px;font:inherit}
+button{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer;background:#111827;color:#fff}.secondary{background:#e5e7eb;color:#111827}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.stat{font-size:25px;font-weight:800}.muted{color:#6b7280;font-size:14px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:9px;border-bottom:1px solid #e5e7eb;font-size:14px}
+.notice{padding:12px;border-radius:10px;background:#eef2ff;color:#3730a3}
+</style></head>
+<body>
+<header><div class="wrap"><h1>BizBoost AI Testing</h1><p>Track what real small-business testers actually think.</p></div></header>
+<main class="wrap">
+<section class="card"><h2>New business test</h2>
+<div class="grid">
+<div><label>Business name</label><input id="name" placeholder="e.g. Ada's Cakes"></div>
+<div><label>Business type</label><select id="type">
+<option>Food / Restaurant</option><option>Bakery</option><option>Barber / Salon</option><option>Clothing</option><option>Phone / Electronics</option><option>Photography</option><option>Other</option></select></div>
+<div><label>Location</label><input id="location" placeholder="e.g. Lagos"></div>
+<div><label>Tester</label><input id="tester" placeholder="Owner / staff / you"></div>
+</div><div class="actions"><button onclick="startTest()">Start test</button><button class="secondary" onclick="clearForm()">Clear</button></div></section>
+
+<section class="card" id="rating" hidden><h2>Feedback</h2>
+<div class="notice">Show the BizBoost result to the tester, then record their honest feedback.</div>
+<div class="grid">
+<div><label>Useful? (1–5)</label><select id="useful"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+<div><label>Sounds natural? (1–5)</label><select id="natural"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+<div><label>Would they use it? (1–5)</label><select id="useIt"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+</div>
+<label>What should BizBoost change?</label><textarea id="feedback" rows="4" placeholder="Short, honest feedback..."></textarea>
+<div class="actions"><button onclick="saveTest()">Save test</button></div></section>
+
+<section class="card"><h2>Testing dashboard</h2><div class="grid">
+<div><div class="stat" id="count">0</div><div class="muted">Businesses tested</div></div>
+<div><div class="stat" id="avg">—</div><div class="muted">Average usefulness</div></div>
+<div><div class="stat" id="adopt">—</div><div class="muted">Would-use average</div></div>
+</div>
+<div class="actions"><button onclick="exportCSV()">Export CSV</button><button class="secondary" onclick="clearAll()">Delete test data</button></div>
+<div style="overflow:auto;margin-top:14px"><table><thead><tr><th>Business</th><th>Type</th><th>Location</th><th>Useful</th><th>Natural</th><th>Use</th><th>Feedback</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+</main>
+<script>
+let tests=JSON.parse(localStorage.getItem('bizboostTests')||'[]'),current=null;
+const $=id=>document.getElementById(id);
+function startTest(){const name=$('name').value.trim();if(!name){alert('Enter a business name first.');return}
+current={name,type:$('type').value,location:$('location').value.trim(),tester:$('tester').value.trim(),createdAt:new Date().toISOString()};
+$('rating').hidden=false;$('rating').scrollIntoView({behavior:'smooth'})}
+function saveTest(){if(!current)return;current.useful=+$('useful').value;current.natural=+$('natural').value;current.useIt=+$('useIt').value;current.feedback=$('feedback').value.trim();
+tests.push(current);localStorage.setItem('bizboostTests',JSON.stringify(tests));current=null;$('rating').hidden=true;$('feedback').value='';render();alert('Test saved locally on this device.')}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){$('count').textContent=tests.length;$('avg').textContent=tests.length?(tests.reduce((a,x)=>a+x.useful,0)/tests.length).toFixed(1)+'/5':'—';$('adopt').textContent=tests.length?(tests.reduce((a,x)=>a+x.useIt,0)/tests.length).toFixed(1)+'/5':'—';
+$('rows').innerHTML=tests.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.type)}</td><td>${esc(x.location)}</td><td>${x.useful}/5</td><td>${x.natural}/5</td><td>${x.useIt}/5</td><td>${esc(x.feedback)}</td></tr>`).join('')}
+function clearForm(){['name','location','tester'].forEach(id=>$(id).value='')}
+function clearAll(){if(confirm('Delete all locally stored test results?')){tests=[];localStorage.removeItem('bizboostTests');render()}}
+function exportCSV(){if(!tests.length){alert('No test results yet.');return}const head=['Business','Type','Location','Tester','Useful','Natural','Would use','Feedback','Created'];
+const rows=tests.map(x=>[x.name,x.type,x.location,x.tester,x.useful,x.natural,x.useIt,x.feedback,x.createdAt]);
+const csv=[head,...rows].map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n');
+const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='bizboost-business-tests.csv';a.click()}
+render();
+</script></body></html>
